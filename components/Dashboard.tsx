@@ -4,6 +4,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Dashboard = () => {
   const { data: session } = useSession();
+  console.log(session);
 
   return (
     <>
@@ -30,6 +31,12 @@ const Dashboard = () => {
               onClick={() => signIn("google")}
             >
               Sign in with google
+            </button>
+            <button
+              className="border border-black rounded-lg  py-1 px-5"
+              onClick={() => signIn("a")}
+            >
+              Credentials
             </button>
           </div>
         </>
