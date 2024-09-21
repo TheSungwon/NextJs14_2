@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const formSchema = z
   .object({
@@ -63,8 +64,19 @@ const RegisterForm = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const response = await fetch(`api/auth/register`, {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      toast.error(data.error);
+    }
+    toast.success(data.success);
   }
   return (
     <Form {...form}>
