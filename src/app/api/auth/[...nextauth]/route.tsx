@@ -12,19 +12,13 @@ const handler = NextAuth({
     CredentialsProvider({
       name: "a",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "a" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {},
       },
-      async authorize(credentials) {
+
+      async authorize(credentials, req) {
         // If no error and we have user data, return it
-        if (credentials?.username === "a") {
-          return {
-            id: "123",
-            name: "John Doe",
-            email: "jdoe@example.com",
-            b: "dddddd",
-          };
-        }
+
         // Return null if user data could not be retrieved
         return null;
       },
@@ -43,7 +37,8 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      return token;
+      session.user = { ...token };
+      return session;
     },
   },
 });
