@@ -4,7 +4,7 @@ const uri = "mongodb://localhost:27017";
 const options = {};
 
 let client;
-let clientPromise;
+let clientPromise: Promise<MongoClient>;
 
 if (process.env.NODE_ENV === "development") {
   if (!global._mongoClientPromise) {

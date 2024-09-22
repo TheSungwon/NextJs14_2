@@ -2,6 +2,7 @@ import NextAuth from "next-auth/next";
 import Google from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { randomBytes, randomUUID } from "crypto";
+import clientPromise from "@/lib/mongodb";
 
 const handler = NextAuth({
   providers: [
@@ -17,9 +18,23 @@ const handler = NextAuth({
       },
 
       async authorize(credentials, req) {
+        console.log(credentials, "@@@@@@@@@@");
         // If no error and we have user data, return it
-
+        const client: unknown = await clientPromise;
+        const db = client.db("demo_nextauth") as unknown;
         // Return null if user data could not be retrieved
+
+        const user = await db
+          .collection("users")
+          .findOne({ email: credentials?.email });
+
+        const bcrypt = require("bcrypt");
+        if (bcrypt.compareSync(credentials?.password, user?.password)) {
+          return {
+            id: user?._id.toString(),
+            email: user?.email,
+          };
+        }
         return null;
       },
     }),
