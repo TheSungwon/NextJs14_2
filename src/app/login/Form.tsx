@@ -62,6 +62,8 @@ const LoginForm = () => {
       router.push("/dashboard");
     }
     toast.success("You are now signed in!");
+    form.setError("email", { message: "이메일 다시 입력해" });
+    form.setError("password", { message: "비밀번호 다시 입력해" });
   }
   return (
     <Form {...form}>
