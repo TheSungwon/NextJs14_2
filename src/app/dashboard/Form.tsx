@@ -14,7 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { signOut, useSession } from "next-auth/react";
 
 const formSchema = z.object({
   email: z
@@ -36,8 +37,7 @@ const DashboardForm = ({ email }: { email: string }) => {
     },
   });
 
-  const router = useRouter();
-  // 2. Define a submit handler.
+  const { data: session, update } = useSession();
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     const response = await fetch(`/api/updateEmail`, {
@@ -45,7 +45,27 @@ const DashboardForm = ({ email }: { email: string }) => {
       body: JSON.stringify(values),
     });
 
-    toast.success("You are now signed in!");
+    const data = await response.json();
+    if (data.error) {
+      toast.error("이메일 변경에 실패했습니다. 다시 시도하세요.");
+      return;
+    } else {
+      update({
+        ...session,
+        user: {
+          ...session?.user,
+          email: values.email,
+        },
+      });
+
+      // reloadSession();
+      // const event = new Event("visibilitychange");
+      // document.dispatchEvent(event);
+      toast.success("You are now signed in!");
+
+      alert("이메일 변경 완료! 다시 로그인 해");
+      signOut();
+    }
   }
   return (
     <Form {...form}>
@@ -66,8 +86,16 @@ const DashboardForm = ({ email }: { email: string }) => {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button className="block" type="submit">
+          이메일 변경
+        </Button>
       </form>
+      <Button
+        className="border border-black rounded-lg bg-red-400 py-1 px-5"
+        onClick={() => signOut()}
+      >
+        sign out
+      </Button>
     </Form>
   );
 };

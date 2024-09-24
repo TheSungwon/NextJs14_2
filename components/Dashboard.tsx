@@ -27,13 +27,13 @@ const Dashboard = () => {
           </h1>
           <div className="flex space-x-5">
             <button
-              className="border border-black rounded-lg  py-1 px-5"
+              className="border border-red-500 rounded-lg  py-1 px-5"
               onClick={() => signIn("google")}
             >
               Sign in with google
             </button>
             <button
-              className="border border-black rounded-lg  py-1 px-5"
+              className="border border-green-500 rounded-lg  py-1 px-5"
               onClick={() => signIn("a")}
             >
               Credentials

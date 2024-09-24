@@ -95,14 +95,14 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <Link
-          className="block border border-black rounded-lg bg-lime-700 py-2  text-center"
-          href="/register"
-        >
-          회원가입
-        </Link>
-        <Button type="submit">Submit</Button>
+        <Button type="submit">로그인</Button>
       </form>
+      <Link
+        className="w-20 block border border-black rounded-lg bg-lime-700 py-2  text-center"
+        href="/register"
+      >
+        회원가입
+      </Link>
     </Form>
   );
 };

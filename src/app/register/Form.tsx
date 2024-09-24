@@ -125,14 +125,14 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <Link
-          className="block border border-black rounded-lg bg-lime-700 py-2  text-center"
-          href="/login"
-        >
-          기존 회원 로그인
-        </Link>
         <Button type="submit">Submit</Button>
       </form>
+      <Link
+        className="block border border-black rounded-lg bg-lime-700 py-2  text-center"
+        href="/login"
+      >
+        기존 회원 로그인
+      </Link>
     </Form>
   );
 };
