@@ -38,7 +38,18 @@ const DashboardForm = ({ email }: { email: string }) => {
   });
 
   const { data: session, update } = useSession();
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (values?.email === session?.user?.email) {
+      toast.error("이메일 변경 실패", {
+        description: "현재 이메일과 동일합니다.",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      return;
+    }
     console.log(values);
     const response = await fetch(`/api/updateEmail`, {
       method: "POST",
@@ -47,7 +58,13 @@ const DashboardForm = ({ email }: { email: string }) => {
 
     const data = await response.json();
     if (data.error) {
-      toast.error("이메일 변경에 실패했습니다. 다시 시도하세요.");
+      toast.error("이메일 변경 실패", {
+        description: "다시 시도하세요.",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
       return;
     } else {
       update({
@@ -61,42 +78,50 @@ const DashboardForm = ({ email }: { email: string }) => {
       // reloadSession();
       // const event = new Event("visibilitychange");
       // document.dispatchEvent(event);
-      toast.success("You are now signed in!");
-
-      alert("이메일 변경 완료! 다시 로그인 해");
-      signOut();
+      toast.success("이메일 변경 완료", {
+        description: "",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
     }
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <h1 className="text-2xl font-semibold">대시보드 이메일 변경</h1>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>EMAIL</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn@.mail.com" {...field} />
-              </FormControl>
-              <FormDescription>변경할 이메일 입력해</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <h1 className="text-2xl font-semibold">
+        welcome back {session?.user?.email}
+      </h1>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <h1 className="text-2xl font-semibold">대시보드 이메일 변경</h1>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>EMAIL</FormLabel>
+                <FormControl>
+                  <Input placeholder="hello@mail.com" {...field} />
+                </FormControl>
+                <FormDescription>변경할 이메일 입력해</FormDescription>
+                <FormMessage className="shake" />
+              </FormItem>
+            )}
+          />
 
-        <Button className="block" type="submit">
-          이메일 변경
+          <Button className="block w-40" type="submit">
+            이메일 변경
+          </Button>
+        </form>
+        <Button
+          className="border border-black rounded-lg bg-red-400 py-1 w-40"
+          onClick={() => signOut()}
+        >
+          로그아웃
         </Button>
-      </form>
-      <Button
-        className="border border-black rounded-lg bg-red-400 py-1 px-5"
-        onClick={() => signOut()}
-      >
-        sign out
-      </Button>
-    </Form>
+      </Form>
+    </>
   );
 };
 
