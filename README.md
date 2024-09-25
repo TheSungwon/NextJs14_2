@@ -12,3 +12,5 @@ npm install next-themes
 npx shadcn@latest add form
 npx shadcn@latest add input
 npx shadcn@latest add sonner
+npx shadcn@latest add dropdown-menu
+npx shadcn@latest add toggle

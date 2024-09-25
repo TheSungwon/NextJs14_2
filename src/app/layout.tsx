@@ -4,6 +4,7 @@ import "./globals.css";
 import SessionWrapper from "../../components/SessionWrapper";
 import { ThemeProvider } from "../../components/theme-provider";
 import { Toaster } from "sonner";
+import { Navbar } from "../../components/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,16 +29,17 @@ export default function RootLayout({
 }>) {
   return (
     <SessionWrapper>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
+            <Navbar />
             {children}
             <Toaster />
           </ThemeProvider>
