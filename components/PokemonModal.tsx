@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
+import { getKoreanName } from "@/utils/pokemonData";
 
 interface Pokemon {
   id: number;
@@ -56,7 +57,7 @@ const PokemonModal: React.FC<PokemonModalProps> = ({ pokemon, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-2xl font-bold mb-4 capitalize text-black">
-          {pokemon.name}
+          {`ENG : ${pokemon.name} / KOR :  ${getKoreanName(pokemon.name)}`}
         </h2>
         <div className="flex justify-center items-center space-x-4 mb-4 ">
           <Image
