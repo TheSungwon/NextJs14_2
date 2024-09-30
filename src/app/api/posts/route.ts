@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get("limit") || "10");
 
   const client = await clientPromise;
-  const db = client.db("posts");
+  const db = client.db("demo_nextauth");
 
   const skip = (page - 1) * limit;
   const posts = await db
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   const { title, content, fileUrl } = await request.json();
 
   const client = await clientPromise;
-  const db = client.db("posts");
+  const db = client.db("demo_nextauth");
   console.log(session.user, "@@@@@@@@@@@@@@@@@@");
   const post = {
     title,

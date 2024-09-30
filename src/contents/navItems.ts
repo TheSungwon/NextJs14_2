@@ -1,8 +1,22 @@
-const navItems = {
+export const baseNavItems = {
   home: "/",
-  login: "/login",
   게시판: "/board",
-  contact: "/contact",
+  "관리자 게시판": "/admin",
+  pokemon: "/pokemon",
+  login: "/login",
 };
 
-export default navItems;
+export type NavItemsType = typeof baseNavItems;
+
+export function getNavItems(isLoggedIn: boolean): NavItemsType {
+  if (isLoggedIn) {
+    const { login, ...rest } = baseNavItems;
+    return {
+      ...rest,
+      logout: "/api/auth/signout",
+    };
+  }
+  return baseNavItems;
+}
+
+export default baseNavItems;

@@ -16,7 +16,7 @@ export default function AdminPage() {
     } else {
       fetchPosts();
     }
-  }, [session, status]);
+  }, [router, session, status]);
 
   const fetchPosts = async () => {
     const res = await fetch("/api/admin/posts");

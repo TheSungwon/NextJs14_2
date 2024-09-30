@@ -58,7 +58,9 @@ export default function PostList({
             key={page}
             onClick={() => onPageChange(page)}
             className={`mx-1 px-3 py-1 rounded ${
-              currentPage === page ? "bg-blue-500 text-white" : "bg-gray-200"
+              currentPage === page
+                ? "bg-blue-500 text-black"
+                : "bg-gray-200 text-black"
             }`}
           >
             {page}
