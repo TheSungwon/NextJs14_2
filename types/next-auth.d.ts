@@ -1,13 +1,27 @@
 import "next-auth";
 
-declare global {
-  interface User {
-    aaa: string;
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      role?: string;
+    };
   }
 
-  module "next-auth" {
-    interface Session {
-      user: User;
-    }
+  interface User {
+    id: string;
+    email: string;
+    role?: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    email: string;
+    role?: string;
   }
 }

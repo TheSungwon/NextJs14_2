@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   console.log(request);
   // GET 요청 처리
   const client = await clientPromise;
-  const db = client.db("your_database_name");
+  const db = client.db("user");
   console.log(db);
   return NextResponse.json({
     message: "GET request handled",

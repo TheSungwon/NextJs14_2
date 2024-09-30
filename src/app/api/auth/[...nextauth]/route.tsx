@@ -1,11 +1,12 @@
-import NextAuth from "next-auth/next";
+import NextAuth, { AuthOptions } from "next-auth";
 import Google from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { randomBytes, randomUUID } from "crypto";
+// import { randomBytes, randomUUID } from "crypto";
 import clientPromise from "@/lib/mongodb";
 import { MongoClient } from "mongodb";
 import * as bcrypt from "bcrypt";
-const handler = NextAuth({
+
+export const authOptions: AuthOptions = {
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -17,9 +18,12 @@ const handler = NextAuth({
         email: {},
         password: {},
       },
-
       async authorize(credentials) {
         console.log(credentials, "@@@@@@@@@@");
+
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
         // If no error and we have user data, return it
         const client = (await clientPromise) as MongoClient;
         const db = client.db("demo_nextauth");
@@ -29,37 +33,49 @@ const handler = NextAuth({
           .collection("users")
           .findOne({ email: credentials?.email });
 
+        if (!user) {
+          return null;
+        }
+
         if (bcrypt.compareSync(credentials?.password ?? "", user?.password)) {
           return {
-            id: user?._id.toString(), // Convert id to string
+            id: user?._id.toString(),
             email: user?.email,
-          } as never;
+            role: user?.role || "user",
+          };
         }
 
         return null;
       },
     }),
   ],
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
-    generateSessionToken: () => {
-      return randomUUID?.() ?? randomBytes(32).toString("hex");
-    },
-  },
+  // session: {
+  //   strategy: "jwt",
+  //   maxAge: 30 * 24 * 60 * 60,
+  //   generateSessionToken: () => {
+  //     return randomUUID?.() ?? randomBytes(32).toString("hex");
+  //   },
+  // },
   callbacks: {
-    jwt: async ({ user, token, trigger, session }) => {
-      if (trigger === "update") {
-        return { ...token, ...session.user };
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.role = user.role;
       }
-      return { ...token, ...user };
+      return token;
     },
-
     async session({ session, token }) {
-      session.user = { ...token };
+      if (token && session.user) {
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.user.role = token.role as string;
+      }
       return session;
     },
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
