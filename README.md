@@ -14,3 +14,8 @@ npx shadcn@latest add input
 npx shadcn@latest add sonner
 npx shadcn@latest add dropdown-menu
 npx shadcn@latest add toggle
+
+npm install axios @tanstack/react-query multer react-dropzone @hookform/resolvers yup
+
+npm install react react-dom react-image-crop tesseract.js
+npm install react react-dom react-easy-crop tesseract.js

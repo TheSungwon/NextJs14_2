@@ -7,6 +7,9 @@ import { MongoClient } from "mongodb";
 import * as bcrypt from "bcrypt";
 
 export const authOptions: AuthOptions = {
+  pages: {
+    signIn: "/login",
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID as string,

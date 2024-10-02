@@ -1,7 +1,7 @@
 // import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-interface Post {
+export interface Post {
   _id: string;
   title: string;
   author: {

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Post } from "../../../components/PostList";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function AdminPage() {
   const [posts, setPosts] = useState([]);
@@ -36,7 +38,7 @@ export default function AdminPage() {
   };
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!session || session.user.role !== "admin") {
@@ -56,7 +58,7 @@ export default function AdminPage() {
           </tr>
         </thead>
         <tbody>
-          {posts.map((post: any) => (
+          {posts.map((post: Post) => (
             <tr key={post._id} className="border-b">
               <td className="p-2">{post.title}</td>
               <td className="p-2">{post.author.email}</td>

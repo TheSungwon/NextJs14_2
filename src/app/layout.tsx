@@ -4,7 +4,11 @@ import "./globals.css";
 import SessionWrapper from "../../components/SessionWrapper";
 import { ThemeProvider } from "../../components/theme-provider";
 import { Toaster } from "sonner";
-import { Navbar } from "../../components/Navbar";
+import { Sidebar } from "../../components/Sidebar";
+import { UserMenu } from "../../components/UserMenu";
+import { Package2 } from "lucide-react";
+import Link from "next/link";
+import { Navigation } from "../../components/Navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,8 +42,22 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
+            themes={["light", "dark", "violet"]}
           >
-            <Navbar />
+            {" "}
+            <div className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 text-lg font-semibold md:text-base"
+                >
+                  <Package2 className="h-6 w-6" />
+                  <span className="sr-only">Acme Inc</span>
+                </Link>
+                <Navigation />
+              </div>
+              <UserMenu />
+            </div>
             {children}
             <Toaster />
           </ThemeProvider>
