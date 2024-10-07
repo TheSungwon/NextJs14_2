@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const req = await request.json();
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const bcrypt = require("bcrypt");
 
     const hashedPassword = bcrypt.hashSync(req.password, 10);
@@ -15,6 +14,7 @@ export async function POST(request: Request) {
     const createUser = await db.collection("users").insertOne({
       email: req.email,
       password: hashedPassword,
+      role: "admin",
     });
 
     console.log(createUser, "@@@@@@@@@@@");
