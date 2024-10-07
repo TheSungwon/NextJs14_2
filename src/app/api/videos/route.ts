@@ -1,62 +1,57 @@
 import clientPromise from "@/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { google } from "googleapis";
-import { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "../auth/[...nextauth]/route";
 import Video from "@/models/Video";
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions);
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
 
   if (!session || session.user.role !== "admin") {
-    return res.status(401).json({ error: "Unauthorized" });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+    });
   }
-
+  console.log(req, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
   const client = await clientPromise;
   await client.connect();
   const db = client.db("demo_nextauth");
 
-  if (req.method === "POST") {
-    try {
-      const { youtubeId } = req.body;
-      console.log(youtubeId);
+  try {
+    const { youtubeId } = await req.json();
+    const youtube = google.youtube({
+      version: "v3",
+      auth: process.env.YOUTUBE_API_KEY,
+    });
 
-      const youtube = google.youtube({
-        version: "v3",
-        auth: process.env.YOUTUBE_API_KEY,
+    const response = await youtube.videos.list({
+      part: ["snippet", "contentDetails"],
+      id: [youtubeId],
+    });
+
+    if (response.data.items && response.data.items.length > 0) {
+      const videoData = response.data.items[0];
+      const duration = parseDuration(videoData.contentDetails?.duration || "");
+
+      const video = new Video({
+        youtubeId,
+        title: videoData.snippet?.title || "",
+        description: videoData.snippet?.description || "",
+        duration,
       });
 
-      console.log(youtube);
+      await db.collection("videos").insertOne(video);
 
-      const response = await youtube.videos.list({
-        part: ["snippet", "contentDetails"],
-        id: [youtubeId],
+      return new Response(JSON.stringify(video), { status: 201 });
+    } else {
+      return new Response(JSON.stringify({ error: "Video not found" }), {
+        status: 404,
       });
-
-      if (response.data.items && response.data.items.length > 0) {
-        const videoData = response.data.items[0];
-        const duration = parseDuration(
-          videoData.contentDetails?.duration || ""
-        );
-
-        const video = new Video({
-          youtubeId,
-          title: videoData.snippet?.title || "",
-          description: videoData.snippet?.description || "",
-          duration,
-        });
-
-        await db.collection("videos").insertOne(video);
-
-        return res.status(201).json(video);
-      } else {
-        return res.status(404).json({ error: "Video not found" });
-      }
-    } catch {
-      return res.status(500).json({ error: "Internal server error" });
     }
-  } else {
-    return res.status(405).json({ error: "Method not allowed" });
+  } catch {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+    });
   }
 }
 

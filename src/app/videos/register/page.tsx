@@ -11,16 +11,25 @@ export default function NewVideo() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(youtubeId, "@@@");
-    const res = await fetch("/api/videos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ youtubeId }),
-    });
-    if (res.ok) {
+    try {
+      const res = await fetch("/api/videos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ youtubeId }),
+      });
+
+      if (!res.ok) {
+        const errorData = res.headers
+          .get("content-type")
+          ?.includes("application/json")
+          ? await res.json()
+          : { error: "Unknown error occurred" };
+        throw new Error(errorData.error || "Error adding video");
+      }
+
       router.push("/admin/videos");
-    } else {
-      alert("Error adding video");
+    } catch (error) {
+      alert(error.message);
     }
   };
 
