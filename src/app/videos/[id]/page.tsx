@@ -23,7 +23,7 @@ export default function VideoDetail() {
   useEffect(() => {
     if (status === "authenticated" && id) {
       fetchVideo();
-      fetchWatchHistory();
+      // fetchWatchHistory();
     }
   }, [status, id]);
 
@@ -40,18 +40,18 @@ export default function VideoDetail() {
     }
   };
 
-  const fetchWatchHistory = async () => {
-    try {
-      const res = await fetch(`/api/watch-history/${id}`);
-      if (!res.ok) {
-        throw new Error("Failed to fetch watch history");
-      }
-      const data = await res.json();
-      setWatchedSeconds(data.watchedSeconds);
-    } catch (error) {
-      console.error("Error fetching watch history:", error);
-    }
-  };
+  // const fetchWatchHistory = async () => {
+  //   try {
+  //     const res = await fetch(`/api/watch-history/${id}`);
+  //     if (!res.ok) {
+  //       throw new Error("Failed to fetch watch history");
+  //     }
+  //     const data = await res.json();
+  //     setWatchedSeconds(data.watchedSeconds);
+  //   } catch (error) {
+  //     console.error("Error fetching watch history:", error);
+  //   }
+  // };
 
   if (status === "loading") return <div>Loading...</div>;
   if (!session) return <div>Please sign in to view this video</div>;

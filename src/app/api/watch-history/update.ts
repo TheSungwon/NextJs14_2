@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 import Video from "@/models/Video";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function hnadler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

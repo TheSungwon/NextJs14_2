@@ -29,7 +29,7 @@ export default function NewVideo() {
 
       router.push("/admin/videos");
     } catch (error) {
-      alert(error.message);
+      alert((error as Error).message);
     }
   };
 

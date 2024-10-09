@@ -15,12 +15,14 @@ export async function GET(
   }
 
   const client = await clientPromise;
-  const db = client.db("your_database_name");
+  await client.connect();
+  const db = client.db("demo_nextauth");
 
   try {
     const video = await db
       .collection("videos")
-      .findOne({ _id: new ObjectId(params.id) });
+      // .findOne({ _id: new ObjectId(params.id) });
+      .findOne({ youtubeId: params.id });
     if (!video) {
       return NextResponse.json({ error: "Video not found" }, { status: 404 });
     }
