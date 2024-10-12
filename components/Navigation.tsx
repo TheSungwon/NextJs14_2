@@ -20,7 +20,7 @@ export function Navigation() {
     { href: "/pokemon", label: "Pokemon" },
     { href: "/board", label: "게시판" },
     { href: "/ocr", label: "OCR" },
-    { href: "/settings", label: "Settings" },
+    { href: "/videos/register", label: "Video" },
   ];
 
   return (

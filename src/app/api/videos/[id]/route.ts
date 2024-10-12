@@ -2,13 +2,15 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import clientPromise from "@/lib/mongodb";
 import { authOptions } from "../../auth/[...nextauth]/route";
-import { ObjectId } from "mongodb";
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   console.log(params, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+  // GET 요청 처리
+
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -61,7 +61,7 @@ const LoginForm = () => {
     if (!response?.error) {
       router.push("/dashboard");
     }
-    toast.success("You are now signed in!");
+    toast.success("로그인 성공! 로그인 페이지에서 로그인하세요.");
     form.setError("email", { message: "이메일 다시 입력해" });
     form.setError("password", { message: "비밀번호 다시 입력해" });
   }
@@ -76,7 +76,9 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>EMAIL</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn@.mail.com" {...field} />
+                <div className="transition duration-200 focus-within:scale-110 relative">
+                  <Input placeholder="shadcn@.mail.com" {...field} />
+                </div>
               </FormControl>
               <FormDescription>이메일 입력해</FormDescription>
               <FormMessage />
@@ -90,21 +92,31 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>비밀번호</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <div className="transition duration-200 focus-within:scale-110">
+                  <Input type="password" {...field} />
+                </div>
               </FormControl>
               <FormDescription>비밀번호 입력해</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">로그인</Button>
+        <Button
+          type="submit"
+          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          로그인
+        </Button>
       </form>
-      <Link
-        className="w-20 block border border-black rounded-lg bg-lime-700 py-2  text-center"
-        href="/register"
-      >
-        회원가입
-      </Link>
+      <div className="mt-4 text-center">
+        <p>
+          아이디가 없나요?{" "}
+          <Link href="/register" className="text-lime-700 hover:text-lime-600">
+            회원가입
+          </Link>
+          하세요.
+        </p>
+      </div>
     </Form>
   );
 };
