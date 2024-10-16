@@ -1,23 +1,11 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
-const uri = process.env.MONGODB_URI! || "mongodb://localhost:27017";
-const options = {};
+const uri =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/demo_nextauth";
 
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+mongoose
+  .connect(uri)
+  .then(() => console.log("MongoDB에 성공적으로 연결되었습니다. 🎃"))
+  .catch((err) => console.error("MongoDB 연결 오류:", err));
 
-if (process.env.NODE_ENV === "development") {
-  const globalWithMongo = global as typeof global & {
-    _mongoClientPromise?: Promise<MongoClient>;
-  };
-  if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    globalWithMongo._mongoClientPromise = client.connect();
-  }
-  clientPromise = globalWithMongo._mongoClientPromise;
-} else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
-}
-
-export default clientPromise;
+export default mongoose;

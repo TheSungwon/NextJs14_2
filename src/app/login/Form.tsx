@@ -60,8 +60,10 @@ const LoginForm = () => {
 
     if (!response?.error) {
       router.push("/dashboard");
+      toast.success("로그인 성공!");
+    } else {
+      toast.warning("로그인 실패! 이메일, 비밀번호를 확인하세요.");
     }
-    toast.success("로그인 성공! 로그인 페이지에서 로그인하세요.");
     form.setError("email", { message: "이메일 다시 입력해" });
     form.setError("password", { message: "비밀번호 다시 입력해" });
   }
@@ -77,7 +79,7 @@ const LoginForm = () => {
               <FormLabel>EMAIL</FormLabel>
               <FormControl>
                 <div className="transition duration-200 focus-within:scale-110 relative">
-                  <Input placeholder="shadcn@.mail.com" {...field} />
+                  <Input placeholder="email@gmail.com" {...field} />
                 </div>
               </FormControl>
               <FormDescription>이메일 입력해</FormDescription>
@@ -111,7 +113,10 @@ const LoginForm = () => {
       <div className="mt-4 text-center">
         <p>
           아이디가 없나요?{" "}
-          <Link href="/register" className="text-lime-700 hover:text-lime-600">
+          <Link
+            href="/register"
+            className="text-violet-700 hover:text-violet-600"
+          >
             회원가입
           </Link>
           하세요.

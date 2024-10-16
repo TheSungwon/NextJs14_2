@@ -19,6 +19,10 @@ import Link from "next/link";
 
 const formSchema = z
   .object({
+    name: z
+      .string()
+      .min(1, { message: "이름을 입력해" })
+      .max(10, { message: "10자 이내로 입력해" }),
     email: z
       .string()
       .min(2, {
@@ -58,6 +62,7 @@ const RegisterForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -85,12 +90,26 @@ const RegisterForm = () => {
         <h1 className="text-2xl font-semibold">회원가입</h1>
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>NAME</FormLabel>
+              <FormControl>
+                <Input placeholder="abc" {...field} />
+              </FormControl>
+              <FormDescription>이름 입력해</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>EMAIL</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn@.mail.com" {...field} />
+                <Input placeholder="email@gmail.com" {...field} />
               </FormControl>
               <FormDescription>이메일 입력해</FormDescription>
               <FormMessage />
@@ -125,14 +144,21 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <div className="flex flex-col items-start justify-center space-y-4">
+          <Button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            회원가입
+          </Button>
+          <Link
+            className="bg-violet-700 hover:bg-violet-600 text-white font-bold py-2 px-4 rounded"
+            href="/login"
+          >
+            기존 아이디가 있다면 로그인
+          </Link>
+        </div>
       </form>
-      <Link
-        className="block border border-black rounded-lg bg-lime-700 py-2  text-center"
-        href="/login"
-      >
-        기존 회원 로그인
-      </Link>
     </Form>
   );
 };

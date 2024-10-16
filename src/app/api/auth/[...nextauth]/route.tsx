@@ -2,9 +2,9 @@ import NextAuth, { AuthOptions } from "next-auth";
 import Google from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 // import { randomBytes, randomUUID } from "crypto";
-import clientPromise from "@/lib/mongodb";
-import { MongoClient } from "mongodb";
+import mongoose from "@/lib/mongodb";
 import * as bcrypt from "bcrypt";
+import User from "@/models/User";
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -27,14 +27,10 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
-        // If no error and we have user data, return it
-        const client = (await clientPromise) as MongoClient;
-        const db = client.db("demo_nextauth");
-        // Return null if user data could not be retrieved
+        await mongoose.connection;
 
-        const user = await db
-          .collection("users")
-          .findOne({ email: credentials?.email });
+        const user = await User.findOne({ email: credentials?.email });
+        console.log(user, "@@@@@nextauth");
 
         if (!user) {
           return null;
