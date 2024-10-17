@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -69,7 +70,7 @@ const RegisterForm = () => {
     },
   });
 
-  // 2. Define a submit handler.
+  const router = useRouter();
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     const response = await fetch(`api/auth/register`, {
@@ -79,10 +80,12 @@ const RegisterForm = () => {
 
     const data = await response.json();
 
-    if (data.error) {
+    if (!data.error) {
+      toast.success(data.success);
+      router.push("/login");
+    } else {
       toast.error(data.error);
     }
-    toast.success(data.success);
   }
   return (
     <Form {...form}>

@@ -59,13 +59,13 @@ const LoginForm = () => {
     });
 
     if (!response?.error) {
-      router.push("/dashboard");
       toast.success("로그인 성공!");
+      router.push("/dashboard");
     } else {
       toast.warning("로그인 실패! 이메일, 비밀번호를 확인하세요.");
+      form.setError("email", { message: "이메일 다시 입력해" });
+      form.setError("password", { message: "비밀번호 다시 입력해" });
     }
-    form.setError("email", { message: "이메일 다시 입력해" });
-    form.setError("password", { message: "비밀번호 다시 입력해" });
   }
   return (
     <Form {...form}>

@@ -4,7 +4,6 @@ import "./globals.css";
 import SessionWrapper from "../../components/SessionWrapper";
 import { ThemeProvider } from "../../components/theme-provider";
 import { Toaster } from "sonner";
-import { Sidebar } from "../../components/Sidebar";
 import { UserMenu } from "../../components/UserMenu";
 import { Package2 } from "lucide-react";
 import Link from "next/link";

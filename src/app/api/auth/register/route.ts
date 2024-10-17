@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     });
     await user.save();
 
-    return NextResponse.json({ success: "account create" }, { status: 200 });
+    return NextResponse.json({ success: "회원가입 완료!" }, { status: 200 });
   } catch (error: unknown) {
     console.error("에러: ", error); // 에러 로그 추가
     return NextResponse.json({ error }, { status: 500 });
