@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import clientPromise from "@/lib/mongodb";
 import { authOptions } from "../../auth/[...nextauth]/route";
+import mongoose from "@/lib/mongodb";
+import Video from "@/models/Video";
 
 export async function GET(
   request: Request,
@@ -16,13 +17,10 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const client = await clientPromise;
-  await client.connect();
-  const db = client.db("demo_nextauth");
+  await mongoose.connection;
 
   try {
-    const video = await db
-      .collection("videos")
+    const video = await Video
       // .findOne({ _id: new ObjectId(params.id) });
       .findOne({ youtubeId: params.id });
     if (!video) {
