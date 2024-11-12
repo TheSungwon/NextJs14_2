@@ -21,6 +21,7 @@ export function Navigation() {
     { href: "/board", label: "게시판" },
     { href: "/ocr", label: "OCR" },
     { href: "/videos/register", label: "Video" },
+    { href: "/mabinogi", label: "마비노기" },
   ];
 
   return (
